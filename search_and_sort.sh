@@ -1,5 +1,6 @@
 #!/bin/bash
 
+: '
 if [[ -n $1 ]]; then
 	cd $1
 	echo "Are you sure to start sort in `pwd`? [yes\no]"
@@ -13,8 +14,32 @@ else
 	echo "Enter your file path as an argument!"
 	exit
 fi
+'
 
-for element in `ls $1`
+function get_extention() {
+  echo ${1#*.}
+}
+
+PATH_FROM=$1
+PATH_TO=$2
+
+ELEMENTS=( $(ls $PATH_FROM) )
+
+for element in ${ELEMENTS[@]}
 do
-	echo $element
+  extention=$(get_extention $element)
+  
+  EXTENTION_DIRECTORY="$PATH_TO/$extention" 
+  if [ ! -d $EXTENTION_DIRECTORY]
+  then
+    mkdir $EXTENTION_DIRECTORY
+  fi
+  
+  cp "$PATH_FROM/$element" $EXTENTION_DIRECTORY
 done
+
+# Search into directories?
+# Validation paths
+# Name ocupations ?
+# ...
+
